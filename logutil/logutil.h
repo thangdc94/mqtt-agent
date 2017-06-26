@@ -11,6 +11,8 @@
 #define __LOG_UTIL_H
 
 #include <stdio.h>
+#include <errno.h>
+#include <string.h>
 
 /** No Log */
 #define LOG_NONE (0)
@@ -25,7 +27,7 @@
 /** Log debug */
 #define LOG_DBG (5)
 
-const char *log_level_strings[] = {
+static const char *log_level_strings[] = {
     "NONE",  // 0
     "FATAL", // 1
     "ERROR", // 2
