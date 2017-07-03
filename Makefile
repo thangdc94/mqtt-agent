@@ -54,7 +54,8 @@ APPLICATION_FILES = \
 DEPENDENCY_FLAGS ?= -MMD -MP -MF $(@D)/$*.d 
 
 CFLAGS += $(INCLUDES) $(DEFINES) $(COMPILER_FLAGS) $(DEPENDENCY_FLAGS)
-LDFLAGS += -lpaho-mqtt3c
+LDFLAGS += 
+LDLIBS += -lpaho-mqtt3c
 
 OUTPUT_DIR=$(APP_DIRECTORY)/build
 BIN_DIR=$(OUTPUT_DIR)/bin
@@ -74,10 +75,9 @@ endif
 
 $(OUTPUT_DIR)/%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $(OUTPUT_DIR)/$(@F)
-	$(DEPENDENCY_POST_PROCESS)
 
 $(TARGET_FILE): $(SOURCES_OBJECTS)
-	$(CC) $^ $(LDFLAGS) -o $(TARGET_FILE)
+	$(CC) $^ $(LDFLAGS) $(LDLIBS) -o $(TARGET_FILE)
 	@echo -e '\n$@ Build success'
 
 .PHONY: clean
