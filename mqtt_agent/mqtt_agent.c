@@ -8,15 +8,18 @@
  * @bug No known bug
  */
 
-#include <stdlib.h>     /* for EXIT_FAILURE macro */
-#include <string.h>     /* for strlen() */
+#include <stdlib.h> /* for EXIT_FAILURE macro */
+#include <string.h> /* for strlen() */
 
 #include "mqtt_agent.h" /* for function prototypes */
 #include "hashmap.h"    /* for hashtable */
 #include "logutil.h"    /* for LOG() and log level */
 
 /** Log debug level */
-#define LOG_LEVEL LOG_DBG
+#ifdef LOG_LEVEL
+#undef LOG_LEVEL
+#define LOG_LEVEL LOG_INFO
+#endif //LOG_LEVEL
 
 /** QOS of Publish/Subscribe */
 #define QOS 1
@@ -24,7 +27,7 @@
 /** MQTT Broker Address */
 #define BROKER_ADDRESS "tcp://thingxyz.net:1883"
 
-struct hashmap g_callback_map;  /** hash table for topicName-callback */
+struct hashmap g_callback_map; /** hash table for topicName-callback */
 
 /**
  * @brief Handle delivery Completed
@@ -58,7 +61,7 @@ static int msgarrvd(void *context, char *topicName, int topicLen, MQTTClient_mes
 
     LOG(LOG_DBG, "topic: %s, message: %s", topicName, payloadptr);
 
-    mqttAgent_onMessage *callback = (mqttAgent_onMessage *) hashmap_get(&g_callback_map, topicName);
+    mqttAgent_onMessage *callback = (mqttAgent_onMessage *)hashmap_get(&g_callback_map, topicName);
     if (callback)
     {
         (*callback)(topicName, topicLen, payloadptr);

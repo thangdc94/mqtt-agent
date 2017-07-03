@@ -27,6 +27,21 @@
 /** Log debug */
 #define LOG_DBG (5)
 
+#ifndef LOG_FP
+#ifdef stdout
+#define LOG_FP stdout
+#endif //LOG_FP
+#endif //stdout
+
+/** 
+ * @brief Default log level using for debug 
+ * @details User should define log level they want in files that 
+ * they want to change log level
+ */
+#ifndef LOG_LEVEL
+#define LOG_LEVEL LOG_DBG
+#endif //LOG_LEVEL
+
 static const char *log_level_strings[] = {
     "NONE",  // 0
     "FATAL", // 1
@@ -42,14 +57,14 @@ static const char *log_level_strings[] = {
     {                                                                                     \
         if (level <= LOG_LEVEL)                                                           \
         {                                                                                 \
-            fprintf(stdout, "[%s] %s:%d:", log_level_strings[level], __FILE__, __LINE__); \
-            fprintf(stdout, __VA_ARGS__);                                                 \
+            fprintf(LOG_FP, "[%s] %s:%d:", log_level_strings[level], __FILE__, __LINE__); \
+            fprintf(LOG_FP, __VA_ARGS__);                                                 \
             if (level == LOG_ERR)                                                         \
             {                                                                             \
-                fprintf(stdout, ": %s", strerror(errno));                                 \
+                fprintf(LOG_FP, ": %s", strerror(errno));                                 \
             }                                                                             \
-            fprintf(stdout, "\n");                                                        \
-            fflush(stdout);                                                               \
+            fprintf(LOG_FP, "\n");                                                        \
+            fflush(LOG_FP);                                                               \
         }                                                                                 \
     } while (0)
 
