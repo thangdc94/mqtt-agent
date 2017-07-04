@@ -11,8 +11,6 @@
 #define __LOG_UTIL_H
 
 #include <stdio.h>
-#include <errno.h>
-#include <string.h>
 
 /** No Log */
 #define LOG_NONE (0)
@@ -26,12 +24,6 @@
 #define LOG_INFO (4)
 /** Log debug */
 #define LOG_DBG (5)
-
-#ifndef LOG_FP
-#ifdef stdout
-#define LOG_FP stdout
-#endif //LOG_FP
-#endif //stdout
 
 /** 
  * @brief Default log level using for debug 
@@ -52,20 +44,25 @@ static const char *log_level_strings[] = {
 };
 
 /** Log util function */
-#define LOG(level, ...)                                                                   \
-    do                                                                                    \
-    {                                                                                     \
-        if (level <= LOG_LEVEL)                                                           \
-        {                                                                                 \
-            fprintf(LOG_FP, "[%s] %s:%d:", log_level_strings[level], __FILE__, __LINE__); \
-            fprintf(LOG_FP, __VA_ARGS__);                                                 \
-            if (level == LOG_ERR)                                                         \
-            {                                                                             \
-                fprintf(LOG_FP, ": %s", strerror(errno));                                 \
-            }                                                                             \
-            fprintf(LOG_FP, "\n");                                                        \
-            fflush(LOG_FP);                                                               \
-        }                                                                                 \
+#define LOG(level, ...)                                                                    \
+    do                                                                                     \
+    {                                                                                      \
+        if (level <= LOG_LEVEL)                                                            \
+        {                                                                                  \
+            FILE *log_fp;                                                                  \
+            if (level == LOG_ERR || level == LOG_FATAL)                                    \
+            {                                                                              \
+                log_fp = stderr;                                                           \
+            }                                                                              \
+            else                                                                           \
+            {                                                                              \
+                log_fp = stdout;                                                           \
+            }                                                                              \
+            fprintf(log_fp, "[%s]\t%s:%d:", log_level_strings[level], __FILE__, __LINE__); \
+            fprintf(log_fp, __VA_ARGS__);                                                  \
+            fprintf(log_fp, "\n");                                                         \
+            fflush(log_fp);                                                                \
+        }                                                                                  \
     } while (0)
 
 #endif //__LOG_UTIL_H

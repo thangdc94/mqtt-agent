@@ -83,7 +83,7 @@ $(TARGET_FILE): $(SOURCES_OBJECTS)
 .PHONY: clean
 clean:
 	-rm -rf $(OUTPUT_DIR)
-	-rm -rf docs
+	-rm -rf doc
 
 .PHONY: directories
 directories:
@@ -91,7 +91,7 @@ directories:
 
 .PHONY: doc
 doc:
-	mkdir -p docs
+	mkdir -p doc
 	doxygen Doxyfile
 
 # To facilitate generating all output files in a single output directory, we

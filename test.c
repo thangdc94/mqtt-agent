@@ -17,7 +17,7 @@
 
 void onMessage(char *topicName, int topicLen, char *messageContent)
 {
-    LOG(LOG_DBG, "Receive %s\n", messageContent);
+    LOG(LOG_DBG, "Receive %s", messageContent);
 }
 
 int main(int argc, char const *argv[])

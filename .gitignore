@@ -38,7 +38,7 @@
 
 # Build folder
 /build
-/docs
+/doc
 
 # IDE generated files
 /.vscode
